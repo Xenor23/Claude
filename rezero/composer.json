@@ -1,0 +1,14 @@
+{
+    "name": "xstyl/projectxd",
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Duy Quang"
+        }
+    ],
+    "require": {}
+}

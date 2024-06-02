@@ -1,0 +1,49 @@
+version: "3.9"
+
+networks:
+  mysql-phpmyadmin:
+    name: mysql-phpmyadmin
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/24  # Subnet à utiliser pour les adresses IP
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: serveur_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: M.Duy13
+      MYSQL_DATABASE: rezero
+      MYSQL_USER: php
+      MYSQL_PASSWORD: php
+    ports:
+      - "3307:3306"
+    networks:
+      mysql-phpmyadmin:
+        ipv4_address: 172.18.0.101  # Adresse IP forcée car docker fais chierr à le changer h24
+    restart: always
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  phpmyadmin:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: phpmyadmin:latest
+    container_name: serveur_phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8888:80"
+    networks:
+      mysql-phpmyadmin:
+        ipv4_address : 172.18.0.102
+    restart: always
+    volumes:
+      - ./:/var/www/html/projet
+
+volumes:
+  mysql-data:
